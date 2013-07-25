@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE version SYSTEM "../../lib/pkp/dtd/version.dtd">
+<!--
+  * dbscripts/xml/version.xml
+  *
+  * Copyright (c) 2003-2013 John Willinsky
+  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
+  *
+  * OMP version information.
+  -->
+
+<version>
+	<application>omp</application>
+	<type>core</type>
+	<release>1.0.0.0</release>
+	<tag>omp-1_0_0-0</tag>
+	<date>2013-03-25</date>
+	<info>http://pkp.sfu.ca/omp/</info>
+	<package>http://pkp.sfu.ca/omp/download/omp-1.0.0.tar.gz</package>
+</version>

@@ -1,0 +1,569 @@
+/**
+ * @defgroup js_controllers
+ */
+// Create the controllers namespace.
+jQuery.pkp.controllers = jQuery.pkp.controllers || { };
+
+/**
+ * @file js/controllers/SiteHandler.js
+ *
+ * Copyright (c) 2000-2013 John Willinsky
+ * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
+ *
+ * @class SiteHandler
+ * @ingroup js_controllers
+ *
+ * @brief Handle the site widget.
+ */
+(function($) {
+
+
+	/**
+	 * @constructor
+	 *
+	 * @extends $.pkp.classes.Handler
+	 *
+	 * @param {jQuery} $widgetWrapper An HTML element that this handle will
+	 * be attached to.
+	 * @param {Object} options Handler options.
+	 */
+	$.pkp.controllers.SiteHandler = function($widgetWrapper, options) {
+		this.parent($widgetWrapper, options);
+
+		this.options_ = options;
+		this.unsavedFormElements_ = [];
+
+		$('.go').button();
+
+		this.bind('redirectRequested', this.redirectToUrl);
+		this.bind('notifyUser', this.fetchNotificationHandler_);
+		this.bind('updateHeader', this.updateHeaderHandler_);
+		this.bind('updateSidebar', this.updateSidebarHandler_);
+		this.bind('callWhenClickOutside', this.callWhenClickOutsideHandler_);
+		this.bind('mousedown', this.mouseDownHandler_);
+		this.bind('urlInDivLoaded', this.setMainMaxWidth_);
+
+		// Listen for grid initialized events so the inline help
+		// can be shown or hidden.
+		this.bind('gridInitialized', this.updateHelpDisplayHandler_);
+
+		// Listen for help toggle events.
+		this.bind('toggleInlineHelp', this.toggleInlineHelpHandler_);
+
+		// Bind the pageUnloadHandler_ method to the DOM so it is
+		// called.
+		$(window).bind('beforeunload', this.pageUnloadHandler_);
+
+		// Avoid IE8 caching ajax results. If it does, widgets like
+		// grids will not refresh correctly.
+		$.ajaxSetup({cache: false});
+
+		$('select.applyPlugin', $widgetWrapper).selectBox();
+
+		// Check if we have notifications to show.
+		if (options.hasSystemNotifications) {
+			this.trigger('notifyUser');
+		}
+
+		// bind event handlers for form status change events.
+		this.bind('formChanged', this.callbackWrapper(
+				this.registerUnsavedFormElement_));
+		this.bind('unregisterChangedForm', this.callbackWrapper(
+				this.unregisterUnsavedFormElement_));
+		this.bind('modalCanceled', this.callbackWrapper(
+				this.unregisterUnsavedFormElement_));
+		this.bind('unregisterAllForms', this.callbackWrapper(
+				this.unregisterAllFormElements_));
+
+		this.outsideClickChecks_ = {};
+	};
+	$.pkp.classes.Helper.inherits(
+			$.pkp.controllers.SiteHandler, $.pkp.classes.Handler);
+
+
+	//
+	// Private properties
+	//
+	/**
+	 * Site handler options.
+	 * @private
+	 * @type {Object}
+	 */
+	$.pkp.controllers.SiteHandler.prototype.options_ = null;
+
+
+	/**
+	 * Object with data to be used when checking if user
+	 * clicked outside a site element. See callWhenClickOutsideHandler_()
+	 * to check the expected check options.
+	 * @private
+	 * @type {Object}
+	 */
+	$.pkp.controllers.SiteHandler.prototype.outsideClickChecks_ = null;
+
+
+	/**
+	 * A state variable to store the form elements that have unsaved data.
+	 * @private
+	 * @type {Array}
+	 */
+	$.pkp.controllers.SiteHandler.prototype.unsavedFormElements_ = null;
+
+
+	//
+	// Public static methods.
+	//
+	/**
+	 * Callback used by the tinyMCE plugin to trigger the tinyMCEInitialized
+	 * event in the DOM.
+	 * @param {Object} tinyMCEObject The tinyMCE object instance being
+	 * initialized.
+	 */
+	$.pkp.controllers.SiteHandler.prototype.triggerTinyMCEInitialized =
+			function(tinyMCEObject) {
+		var $inputElement = $('#' + tinyMCEObject.editorId);
+		$inputElement.trigger('tinyMCEInitialized', tinyMCEObject);
+	};
+
+
+	//
+	// Public methods
+	//
+	/**
+	 * Callback that is triggered when the page should redirect.
+	 *
+	 * @param {HTMLElement} sourceElement The element that issued the
+	 *  "redirectRequested" event.
+	 * @param {Event} event The "redirect requested" event.
+	 * @param {string} url The URL to redirect to.
+	 */
+	$.pkp.controllers.SiteHandler.prototype.redirectToUrl =
+			function(sourceElement, event, url) {
+
+		window.location = url;
+	};
+
+
+	/**
+	 * Handler bound to 'formChanged' events propagated by forms
+	 * that wish to have their form data tracked.
+	 *
+	 * @param {HTMLElement} siteHandlerElement The html element
+	 * attached to this handler.
+	 * @param {HTMLElement} sourceElement The element wishes to
+	 * register.
+	 * @param {Event} event The formChanged event.
+	 * @private
+	 */
+	$.pkp.controllers.SiteHandler.prototype.registerUnsavedFormElement_ =
+			function(siteHandlerElement, sourceElement, event) {
+
+		var $formElement = $(event.target.lastElementChild);
+		var formId = $formElement.attr('id');
+		var index = $.inArray(formId, this.unsavedFormElements_);
+		if (index == -1) {
+			this.unsavedFormElements_.push(formId);
+		}
+	};
+
+
+	/**
+	 * Handler bound to 'unregisterChangedForm' events propagated by forms
+	 * that wish to inform that they no longer wish to be tracked as 'unsaved'.
+	 *
+	 * @param {HTMLElement} siteHandlerElement The html element
+	 * attached to this handler.
+	 * @param {HTMLElement} sourceElement The element that wishes to
+	 * unregister.
+	 * @param {Event} event The unregisterChangedForm event.
+	 * @private
+	 */
+	$.pkp.controllers.SiteHandler.prototype.unregisterUnsavedFormElement_ =
+			function(siteHandlerElement, sourceElement, event) {
+
+		var $formElement = $(event.target.lastElementChild);
+		var formId = $formElement.attr('id');
+
+		var index = $.inArray(formId, this.unsavedFormElements_);
+		if (index !== -1) {
+			delete this.unsavedFormElements_[index];
+		}
+	};
+
+
+	/**
+	 * Unregister all unsaved form elements.
+	 * @private
+	 */
+	$.pkp.controllers.SiteHandler.prototype.unregisterAllFormElements_ =
+			function() {
+		this.unsavedFormElements_ = [];
+	};
+
+
+	//
+	// Private methods.
+	//
+	/**
+	 * Respond to a user toggling the display of inline help.
+	 *
+	 * @param {HTMLElement} sourceElement The element that
+	 *  issued the event.
+	 * @param {Event} event The triggering event.
+	 * @return {boolean} Always returns false.
+	 * @private
+	 */
+	$.pkp.controllers.SiteHandler.prototype.toggleInlineHelpHandler_ =
+			function(sourceElement, event) {
+
+		// persist the change on the server.
+		$.ajax({url: this.options_.toggleHelpUrl});
+
+		this.options_.inlineHelpState = this.options_.inlineHelpState ? 0 : 1;
+		this.updateHelpDisplayHandler_();
+
+		// Stop further event processing
+		return false;
+	};
+
+
+	/**
+	 * Callback to listen to grid initialization events. Used to
+	 * toggle the inline help display on them.
+	 *
+	 * @private
+	 *
+	 * @param {HTMLElement} sourceElement The element that issued the
+	 *  "gridInitialized" event.
+	 * @param {Event} event The "gridInitialized" event.
+	 */
+	$.pkp.controllers.SiteHandler.prototype.updateHelpDisplayHandler_ =
+			function(sourceElement, event) {
+
+		var $bodyElement = this.getHtmlElement();
+		var inlineHelpState = this.options_.inlineHelpState;
+		if (inlineHelpState) {
+			// the .css() call removes the CSS applied to the legend intially,
+			// so it is not shown while the page is being loaded.
+			$bodyElement.find('.pkp_grid_description, #legend, .pkp_help').
+					css('visibility', 'visible').show();
+			$bodyElement.find('[id^="toggleHelp"]').html(
+					this.options_.toggleHelpOffText);
+		} else {
+			$bodyElement.find('.pkp_grid_description, #legend, .pkp_help').hide();
+			$bodyElement.find('[id^="toggleHelp"]').html(
+					this.options_.toggleHelpOnText);
+		}
+	};
+
+
+	/**
+	 * Fetch the notification data.
+	 * @param {HTMLElement} sourceElement The element that issued the
+	 *  "fetchNotification" event.
+	 * @param {Event} event The "fetch notification" event.
+	 * @param {string?} jsonData The JSON content representing the
+	 *  notification.
+	 * @private
+	 */
+	$.pkp.controllers.SiteHandler.prototype.fetchNotificationHandler_ =
+			function(sourceElement, event, jsonData) {
+
+		if (jsonData !== undefined) {
+			// This is an event that came from an inplace notification
+			// widget that was not visible because of the scrolling.
+			this.showNotification_(jsonData);
+			return;
+		}
+
+		// Avoid race conditions with in place notifications.
+		$.ajax({
+			url: this.options_.fetchNotificationUrl,
+			data: this.options_.requestOptions,
+			success: this.callbackWrapper(this.showNotificationResponseHandler_),
+			dataType: 'json',
+			async: false
+		});
+	};
+
+
+	/**
+	 * Fetch the header (e.g. on header configuration change).
+	 * @param {HTMLElement} sourceElement The element that issued the
+	 *  update header event.
+	 * @param {Event} event The "fetch header" event.
+	 * @private
+	 */
+	$.pkp.controllers.SiteHandler.prototype.updateHeaderHandler_ =
+			function(sourceElement, event) {
+		var handler = $.pkp.classes.Handler.getHandler($('#headerContainer'));
+		handler.reload();
+	};
+
+
+	/**
+	 * Fetch the sidebar (e.g. on sidebar configuration change).
+	 * @param {HTMLElement} sourceElement The element that issued the
+	 *  update sidebar event.
+	 * @param {Event} event The "fetch sidebar" event.
+	 * @private
+	 */
+	$.pkp.controllers.SiteHandler.prototype.updateSidebarHandler_ =
+			function(sourceElement, event) {
+		var handler = $.pkp.classes.Handler.getHandler($('#sidebarContainer'));
+		handler.reload();
+	};
+
+
+	/**
+	 * Call when click outside event handler. Stores the event
+	 * parameters as checks to be used later by mouse down handler so we
+	 * can track if user clicked outside the passed element or not.
+	 * @param {HTMLElement} sourceElement The element that issued the
+	 *  callWhenClickOutside event.
+	 * @param {Event} event The "call when click outside" event.
+	 * @param {Object} eventParams The event parameters. We expect
+	 * an object with the following properties:
+	 * - container: a jQuery element to be used to test if user click
+	 * outside of it or not.
+	 * - callback: a callback function in case test is true.
+	 * - skipWhenVisibleModals: boolean flag to tell whether skip the
+	 * callback when modals are visible or not.
+	 * @private
+	 */
+	$.pkp.controllers.SiteHandler.prototype.callWhenClickOutsideHandler_ =
+			function(sourceElement, event, eventParams) {
+		// Check the required parameters.
+		if (eventParams.container == undefined) {
+			return;
+		}
+
+		if (eventParams.callback == undefined) {
+			return;
+		}
+
+		var id = eventParams.container.attr('id');
+		this.outsideClickChecks_[id] = eventParams;
+	};
+
+
+	/**
+	 * Mouse down event handler attached to the site element.
+	 * @param {HTMLElement} sourceElement The element that issued the
+	 *  click event.
+	 * @param {Event} event The "mousedown" event.
+	 * @return {boolean} Event handling status.
+	 * @private
+	 */
+	$.pkp.controllers.SiteHandler.prototype.mouseDownHandler_ =
+			function(sourceElement, event) {
+
+		var $container, callback;
+		if (!$.isEmptyObject(this.outsideClickChecks_)) {
+			for (var id in this.outsideClickChecks_) {
+				this.processOutsideClickCheck_(
+						this.outsideClickChecks_[id], event);
+			}
+		}
+
+		return true;
+	};
+
+
+	/**
+	 * Check if the passed event target is outside the element
+	 * inside the passed check data. If true and no other check
+	 * option avoids it, use the callback.
+	 * @param {Object} checkOptions Object with data to be used to
+	 * check the click.
+	 * @param {Event} event The click event to be checked.
+	 * @returns {Boolean} Whether the check was processed or not.
+	 */
+	$.pkp.controllers.SiteHandler.prototype.processOutsideClickCheck_ =
+			function(checkOptions, event) {
+
+		// Make sure we have a click event.
+		if (event.type !== 'click' &&
+				event.type !== 'mousedown' && event.type !== 'mouseup') {
+			throw Error('Can not check outside click with the passed event: ' +
+					event.type + '.');
+			return false;
+		}
+
+		// Get the container element.
+		var $container = checkOptions.container;
+
+		// Doesn't make sense to check an outside click
+		// with an invisible element, so skip test if
+		// container is hidden.
+		if ($container.is(':hidden')) {
+			return false;
+		}
+
+		// Check for the visible modals option.
+		if (checkOptions.skipWhenVisibleModals !==
+				undefined) {
+			if (checkOptions.skipWhenVisibleModals) {
+				if (this.getHtmlElement().find('div.ui-dialog').length > 0) {
+					// Found a modal, return.
+					return false;
+				}
+			}
+		}
+
+		// Do the click origin checking.
+		if ($container.has(event.target).length === 0) {
+
+			// Once the check was processed, delete it.
+			delete this.outsideClickChecks_[$container.attr('id')];
+
+			checkOptions.callback();
+
+			return true;
+		}
+
+		return false;
+	};
+
+
+	/**
+	 * Internal callback called upon page unload. If it returns
+	 * anything other than void, a message will be displayed to
+	 * the user.
+	 *
+	 * @private
+	 *
+	 * @param {Object} object The window object.
+	 * @param {Event} event The beforeunload event.
+	 * @return {string?} the warning message string, if needed.
+	 */
+	$.pkp.controllers.SiteHandler.prototype.pageUnloadHandler_ =
+			function(object, event) {
+
+		// any registered and then unregistered forms will exist
+		// as properties in the unsavedFormElements_ object. They
+		// will just be undefined.  See if there are any that are
+		// not.
+
+		// we need to get the handler this way since this event is bound
+		// to window, not to SiteHandler.
+		var handler = $.pkp.classes.Handler.getHandler($('body'));
+
+		var unsavedElementCount = 0;
+
+		for (var element in handler.unsavedFormElements_) {
+			if (element) {
+				unsavedElementCount++;
+			}
+		}
+		if (unsavedElementCount > 0) {
+			return $.pkp.locale.form_dataHasChanged;
+		}
+	};
+
+
+	/**
+	 * Method to determine if a form is currently registered as having
+	 * unsaved changes.
+	 *
+	 * @param {string} id the id of the form to check.
+	 * @return {boolean} true if the form is unsaved.
+	 */
+	$.pkp.controllers.SiteHandler.prototype.isFormUnsaved =
+			function(id) {
+
+		if (this.unsavedFormElements_ !== null &&
+				this.unsavedFormElements_[id] !== undefined) {
+			return true;
+		}
+		return false;
+	};
+
+
+	/**
+	 * Response handler to the notification fetch.
+	 *
+	 * @param {Object} ajaxContext The data returned from the server.
+	 * @param {content} jsonData A parsed JSON response object.
+	 * @private
+	 */
+	$.pkp.controllers.SiteHandler.prototype.showNotificationResponseHandler_ =
+			function(ajaxContext, jsonData) {
+		this.showNotification_(jsonData);
+	};
+
+
+	/**
+	 * Show the notification content.
+	 *
+	 * @param {string} jsonData The JSON-encoded notification data.
+	 * @private
+	 */
+	$.pkp.controllers.SiteHandler.prototype.showNotification_ =
+			function(jsonData) {
+		var workingJsonData = this.handleJson(jsonData);
+
+		if (workingJsonData !== false) {
+			if (workingJsonData.content.general) {
+				var notificationsData = workingJsonData.content.general;
+				for (var levelId in notificationsData) {
+					for (var notificationId in notificationsData[levelId]) {
+						$.pnotify(notificationsData[levelId][notificationId]);
+					}
+				}
+			}
+		}
+	};
+
+
+	/**
+	 * Set the maximum width for the pkp_structure_main div.
+	 * This will prevent content with larger widths (like photos)
+	 * messing up with layout.
+	 * @private
+	 * @param {HTMLElement} sourceElement The element that
+	 *  issued the event.
+	 * @param {Event} event The triggering event.
+	 * @param {?string} data additional event data.
+	 */
+	$.pkp.controllers.SiteHandler.prototype.setMainMaxWidth_ =
+			function(sourceElement, event, data) {
+
+		var $site = this.getHtmlElement(), structureContentWidth, leftSideBarWidth,
+				rightSideBarWidth, $mainDiv = $('.pkp_structure_main', $site),
+				mainExtraWidth, mainMaxWidth, lastTabOffset, tabsContainerOffset,
+				$lastTab; $allTabs = $mainDiv.find('.ui-tabs:not(.fake-tabs)').tabs();
+
+		if (data == 'sidebarContainer') {
+			structureContentWidth = $('.pkp_structure_content', $site).width();
+
+			leftSideBarWidth = $('.pkp_structure_sidebar_left', $site).
+					outerWidth(true);
+			rightSideBarWidth = $('.pkp_structure_sidebar_right', $site).
+					outerWidth(true);
+
+			// Check for padding, margin or border.
+			mainExtraWidth = $mainDiv.outerWidth(true) - $mainDiv.width();
+			mainMaxWidth = structureContentWidth - (
+					leftSideBarWidth + rightSideBarWidth + mainExtraWidth);
+
+			$mainDiv.css('max-width', mainMaxWidth);
+
+			if ($mainDiv.find('.stTabsInnerWrapper').length == 1) {
+				$mainDiv.find('.stTabsMainWrapper').width($mainDiv.outerWidth(true));
+				tabsContainerOffset = $mainDiv.find('.ui-tabs-nav').offset().left +
+						$mainDiv.find('.ui-tabs-nav').outerWidth(true);
+				$lastTab = $mainDiv.find('.ui-tabs-nav').find('li').last();
+				lastTabOffset = $lastTab.offset().left + $lastTab.outerWidth(true);
+				if (lastTabOffset <= tabsContainerOffset) {
+					$mainDiv.find('.stTabsMainWrapper').find('div').first().hide();
+				} else {
+					$mainDiv.find('.stTabsMainWrapper').find('div').first().show();
+				}
+			}
+		}
+	};
+
+
+/** @param {jQuery} $ jQuery closure. */
+})(jQuery);
