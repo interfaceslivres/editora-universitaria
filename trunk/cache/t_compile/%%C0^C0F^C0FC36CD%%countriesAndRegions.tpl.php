@@ -1,0 +1,18 @@
+<?php /* Smarty version 2.6.26, created on 2013-11-06 14:05:56
+         compiled from controllers/grid/catalogEntry/form/countriesAndRegions.tpl */ ?>
+<?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
+smarty_core_load_plugins(array('plugins' => array(array('block', 'fbvFormSection', 'controllers/grid/catalogEntry/form/countriesAndRegions.tpl', 10, false),array('function', 'fbvElement', 'controllers/grid/catalogEntry/form/countriesAndRegions.tpl', 11, false),)), $this); ?>
+
+<?php $this->_tag_stack[] = array('fbvFormSection', array('title' => "grid.catalogEntry.countries",'for' => 'countriesIncludedCode')); $_block_repeat=true;$this->_plugins['block']['fbvFormSection'][0][0]->smartyFBVFormSection($this->_tag_stack[count($this->_tag_stack)-1][1], null, $this, $_block_repeat);while ($_block_repeat) { ob_start(); ?>
+	<?php echo $this->_plugins['function']['fbvElement'][0][0]->smartyFBVElement(array('type' => 'select','label' => "grid.catalogEntry.included",'from' => $this->_tpl_vars['countryCodes'],'selected' => $this->_tpl_vars['countriesIncluded'],'translate' => false,'id' => 'countriesIncluded','name' => "countriesIncluded[]",'multiple' => 'multiple','size' => $this->_tpl_vars['fbvStyles']['size']['MEDIUM'],'defaultValue' => "",'defaultLabel' => "",'inline' => true), $this);?>
+
+	<?php echo $this->_plugins['function']['fbvElement'][0][0]->smartyFBVElement(array('type' => 'select','label' => "grid.catalogEntry.excluded",'from' => $this->_tpl_vars['countryCodes'],'selected' => $this->_tpl_vars['countriesExcluded'],'translate' => false,'id' => 'countriesExcluded','name' => "countriesExcluded[]",'multiple' => 'multiple','size' => $this->_tpl_vars['fbvStyles']['size']['MEDIUM'],'defaultValue' => "",'defaultLabel' => "",'inline' => true), $this);?>
+
+<?php $_block_content = ob_get_contents(); ob_end_clean(); $_block_repeat=false;echo $this->_plugins['block']['fbvFormSection'][0][0]->smartyFBVFormSection($this->_tag_stack[count($this->_tag_stack)-1][1], $_block_content, $this, $_block_repeat); }  array_pop($this->_tag_stack); ?>
+
+<?php $this->_tag_stack[] = array('fbvFormSection', array('title' => "grid.catalogEntry.regions",'for' => 'countriesIncludedCode')); $_block_repeat=true;$this->_plugins['block']['fbvFormSection'][0][0]->smartyFBVFormSection($this->_tag_stack[count($this->_tag_stack)-1][1], null, $this, $_block_repeat);while ($_block_repeat) { ob_start(); ?>
+	<?php echo $this->_plugins['function']['fbvElement'][0][0]->smartyFBVElement(array('type' => 'select','label' => "grid.catalogEntry.included",'from' => $this->_tpl_vars['regionCodes'],'selected' => $this->_tpl_vars['regionsIncluded'],'translate' => false,'id' => 'regionsIncluded','name' => "regionsIncluded[]",'multiple' => 'multiple','size' => $this->_tpl_vars['fbvStyles']['size']['MEDIUM'],'defaultValue' => "",'defaultLabel' => "",'inline' => true), $this);?>
+
+	<?php echo $this->_plugins['function']['fbvElement'][0][0]->smartyFBVElement(array('type' => 'select','label' => "grid.catalogEntry.excluded",'from' => $this->_tpl_vars['regionCodes'],'selected' => $this->_tpl_vars['regionsExcluded'],'translate' => false,'id' => 'regionsExcluded','name' => "regionsExcluded[]",'multiple' => 'multiple','size' => $this->_tpl_vars['fbvStyles']['size']['MEDIUM'],'defaultValue' => "",'defaultLabel' => "",'inline' => true), $this);?>
+
+<?php $_block_content = ob_get_contents(); ob_end_clean(); $_block_repeat=false;echo $this->_plugins['block']['fbvFormSection'][0][0]->smartyFBVFormSection($this->_tag_stack[count($this->_tag_stack)-1][1], $_block_content, $this, $_block_repeat); }  array_pop($this->_tag_stack); ?>
