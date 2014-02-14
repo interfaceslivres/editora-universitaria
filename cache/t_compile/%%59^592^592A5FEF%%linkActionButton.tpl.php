@@ -1,0 +1,11 @@
+<?php /* Smarty version 2.6.26, created on 2013-07-25 18:45:37
+         compiled from linkAction/linkActionButton.tpl */ ?>
+<?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
+smarty_core_load_plugins(array('plugins' => array(array('modifier', 'escape', 'linkAction/linkActionButton.tpl', 18, false),)), $this); ?>
+
+<?php if (! $this->_tpl_vars['imageClass']): ?>
+	<?php $this->assign('imageClass', 'sprite'); ?>
+<?php endif; ?>
+<a href="javascript:$.noop();" id="<?php echo ((is_array($_tmp=$this->_tpl_vars['buttonId'])) ? $this->_run_mod_handler('escape', true, $_tmp) : $this->_plugins['modifier']['escape'][0][0]->smartyEscape($_tmp)); ?>
+" <?php echo ''; ?><?php if ($this->_tpl_vars['action']->getImage()): ?><?php echo 'class="'; ?><?php echo $this->_tpl_vars['imageClass']; ?><?php echo ' '; ?><?php echo ((is_array($_tmp=$this->_tpl_vars['action']->getImage())) ? $this->_run_mod_handler('escape', true, $_tmp) : $this->_plugins['modifier']['escape'][0][0]->smartyEscape($_tmp)); ?><?php echo ' pkp_controllers_linkAction"title="'; ?><?php echo ((is_array($_tmp=$this->_tpl_vars['action']->getHoverTitle())) ? $this->_run_mod_handler('escape', true, $_tmp) : $this->_plugins['modifier']['escape'][0][0]->smartyEscape($_tmp)); ?><?php echo '">'; ?><?php if ($this->_tpl_vars['hoverTitle']): ?><?php echo '&nbsp;'; ?><?php else: ?><?php echo ''; ?><?php echo ((is_array($_tmp=$this->_tpl_vars['action']->getTitle())) ? $this->_run_mod_handler('escape', true, $_tmp) : $this->_plugins['modifier']['escape'][0][0]->smartyEscape($_tmp)); ?><?php echo ''; ?><?php endif; ?><?php echo ''; ?><?php else: ?><?php echo 'class="pkp_controllers_linkAction"title="'; ?><?php echo ((is_array($_tmp=$this->_tpl_vars['action']->getHoverTitle())) ? $this->_run_mod_handler('escape', true, $_tmp) : $this->_plugins['modifier']['escape'][0][0]->smartyEscape($_tmp)); ?><?php echo '">'; ?><?php if (! $this->_tpl_vars['hoverTitle']): ?><?php echo ''; ?><?php echo ((is_array($_tmp=$this->_tpl_vars['action']->getTitle())) ? $this->_run_mod_handler('escape', true, $_tmp) : $this->_plugins['modifier']['escape'][0][0]->smartyEscape($_tmp)); ?><?php echo ''; ?><?php endif; ?><?php echo ''; ?><?php endif; ?><?php echo ''; ?>
+</a>
