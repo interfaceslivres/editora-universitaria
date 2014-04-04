@@ -37,8 +37,12 @@
 	</div>
 	<div class="unit size4of5">
 		<div class="pkp_structure_navigation">
-			{include file="header/sitenav.tpl"}
+			{include file="header/sitenav.tpl"}			
+			{if !$noPressesConfigured}
+				{include file="common/search.tpl"}
+			{/if}
 			{include file="header/localnav.tpl"}
+
 		</div>
 	</div>
 </div><!-- pkp_structure_content -->

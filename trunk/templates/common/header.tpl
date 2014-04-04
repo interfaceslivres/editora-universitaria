@@ -113,9 +113,7 @@
 		<div class="pkp_structure_body">
 			<div class="pkp_structure_content">
 				<div class="line">
-					{if !$noPressesConfigured}
-						{include file="common/search.tpl"}
-					{/if}
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 				</div>
 
 				{url|assign:fetchSidebarUrl page="sidebar"}
