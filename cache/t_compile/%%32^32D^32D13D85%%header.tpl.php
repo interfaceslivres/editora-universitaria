@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.26, created on 2013-07-25 14:43:55
+<?php /* Smarty version 2.6.26, created on 2014-03-15 23:27:37
          compiled from common/header.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
 smarty_core_load_plugins(array('plugins' => array(array('function', 'translate', 'common/header.tpl', 10, false),array('function', 'url', 'common/header.tpl', 103, false),array('function', 'load_url_in_div', 'common/header.tpl', 112, false),array('modifier', 'assign', 'common/header.tpl', 10, false),array('modifier', 'escape', 'common/header.tpl', 20, false),array('modifier', 'strip_tags', 'common/header.tpl', 21, false),)), $this); ?>
@@ -163,13 +163,7 @@ unset($_smarty_tpl_vars);
 		<div class="pkp_structure_body">
 			<div class="pkp_structure_content">
 				<div class="line">
-					<?php if (! $this->_tpl_vars['noPressesConfigured']): ?>
-						<?php $_smarty_tpl_vars = $this->_tpl_vars;
-$this->_smarty_include(array('smarty_include_tpl_file' => "common/search.tpl", 'smarty_include_vars' => array()));
-$this->_tpl_vars = $_smarty_tpl_vars;
-unset($_smarty_tpl_vars);
- ?>
-					<?php endif; ?>
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 				</div>
 
 				<?php echo ((is_array($_tmp=$this->_plugins['function']['url'][0][0]->smartyUrl(array('page' => 'sidebar'), $this))) ? $this->_run_mod_handler('assign', true, $_tmp, 'fetchSidebarUrl') : $this->_plugins['modifier']['assign'][0][0]->smartyAssign($_tmp, 'fetchSidebarUrl'));?>

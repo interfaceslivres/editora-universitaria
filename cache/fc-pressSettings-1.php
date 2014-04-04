@@ -1,116 +1,141 @@
 <?php return array (
-  'allowRegAuthor' => true,
-  'allowRegReviewer' => true,
-  'contactEmail' => 'paulohsms@gmail.com',
-  'contactFax' => '',
-  'contactName' => 'Paulo Henrique Souto Maior Serrano',
-  'contactPhone' => '',
-  'emailSignature' => '________________________________________________________________________
-
-http://localhost/editora/index.php/ufpb',
-  'itemsPerPage' => 50,
-  'mailingAddress' => '',
-  'navItems' => NULL,
   'numPageLinks' => 10,
-  'numWeeksPerResponse' => 3,
+  'itemsPerPage' => 50,
   'numWeeksPerReview' => 4,
-  'pressEnabled' => true,
-  'supportedFormLocales' => 
+  'numWeeksPerResponse' => 3,
+  'privacyStatement' => 
   array (
-    1 => 'en_US',
-  ),
-  'supportedLocales' => 
-  array (
-    1 => 'en_US',
-    2 => 'en_US',
-  ),
-  'supportedSubmissionLocales' => 
-  array (
-    1 => 'en_US',
-  ),
-  'supportEmail' => '',
-  'supportName' => '',
-  'supportPhone' => '',
-  'authorInformation' => 
-  array (
-    'pt_BR' => 'Interessado em publicar nesta editora? Recomendamos que leia atentamente a página <a href="http://localhost/editora/index.php/ufpb/about">Sobre a editora</a>, que contém as políticas de seções, bem como as <a href="http://localhost/editora/index.php/ufpb/about/submissions#authorGuidelines">Diretrize para autores</a>. É necessário que os autores façam um <a href="http://localhost/editora/index.php/ufpb/user/register">cadastro</a> no sistema antes de realizar a submissão, ou, caso já possuam um, basta fazer o <a href="http://localhost/editora/index.php/index/login">acesso</a> e iniciar os 5 passos do processo de submissão.',
-  ),
-  'cataloguingMetadata' => 
-  array (
-    'pt_BR' => 
-    array (
-      'name' => 'Palavras-chave',
-    ),
-  ),
-  'contactAffiliation' => 
-  array (
-    'pt_BR' => 'UFPB',
-  ),
-  'contactTitle' => 
-  array (
-    'pt_BR' => 'Mestre',
-  ),
-  'description' => 
-  array (
-    'pt_BR' => '<p>Editora da Universidade Federal da Paraíba</p>',
-  ),
-  'initials' => 
-  array (
-    'pt_BR' => 'ufpb',
-  ),
-  'librarianInformation' => 
-  array (
-    'pt_BR' => 'Estimulamos bibliotecas de pesquisa a listar esta editora como um fonte de conteúdo eletrônico. Este sistema de código aberto também é útil para bibliotecas, universidades e seus membros, para uso em conjunto com as editoras com as quais possuem envolvimento editorial (saiba mais acessando <a href="http://pkp.sfu.ca/omp">Open Monograph Press</a>).',
-  ),
-  'name' => 
-  array (
-    'pt_BR' => 'Editora UFPB',
+    'en_US' => 'The names and email addresses entered in this press site will be used exclusively for the stated purposes of this press and will not be made available for any other purpose or to any other party.',
   ),
   'openAccessPolicy' => 
   array (
-    'pt_BR' => 'Esta editora oferece acesso aberto imediato ao seu conteúdo, seguindo o princípio que tornar a pesquisa acessível ao público abertamente proporciona maior intercâmbio de conhecimento de forma global.',
+    'en_US' => '<p>This press provides immediate open access to its content on the principle that making research freely available to the public supports a greater global exchange of knowledge.</p>',
   ),
-  'pageHeaderTitle' => 
-  array (
-    'pt_BR' => 'Editora Universitária UFPB',
-  ),
-  'privacyStatement' => 
-  array (
-    'pt_BR' => 'Os nomes e endereços de e-mail informados nesta editora serão usados exclusivamente para os propósitos da mesma e não serão divulgados ou oferecidos para nenhum outro propósito ou a terceiros.',
-  ),
+  'emailSignature' => '________________________________________________________________________
+
+http://www.editora.ufpb.br/sistema/press/index.php/editoraufpb',
   'readerInformation' => 
   array (
-    'pt_BR' => 'Estimulamos os leitores a se cadastrarem no site para receber notificações da editora. Acesse a página <a href="http://localhost/editora/index.php/ufpb/user/register">Cadastro</a> no topo da págin. O cadastro permitirá ao leitor receber em seu e-mail o Sumário de cada monografia publicada. A lista também permite à editora afirmar o apoio de seus seguidores ou de leitura de suas publicações. Acesse a página sobre a <a href="http://localhost/editora/index.php/ufpb/about/submissions#privacyStatement">Declaração de Privacidade</a>, que assegura aos leitores que seus nomes e endereços de e-mail não serão usados para outros propósitos.',
+    'en_US' => 'We encourage readers to sign up for the publishing notification service for this press. Use the <a href="http://www.editora.ufpb.br/sistema/press/index.php/editoraufpb/user/register">Register</a> link at the top of the homepage for the press. This registration will result in the reader receiving the Table of Contents by email for each new monograph of the press. This list also allows the press to claim a certain level of support or readership. See the press <a href="http://www.editora.ufpb.br/sistema/press/index.php/editoraufpb/about/submissions#privacyStatement">Privacy Statement</a> which assures readers that their name and email address will not be used for other purposes.',
+  ),
+  'authorInformation' => 
+  array (
+    'en_US' => 'Interested in submitting to this press? We recommend that you review the <a href="http://www.editora.ufpb.br/sistema/press/index.php/editoraufpb/about">About the Press</a> page for the press\' section policies and <a href="http://www.editora.ufpb.br/sistema/press/index.php/editoraufpb/about/submissions#authorGuidelines">Author Guidelines</a>. Authors need to <a href="http://www.editora.ufpb.br/sistema/press/index.php/editoraufpb/user/register">register</a> with the press prior to submitting, or if already registered can simply <a href="http://www.editora.ufpb.br/sistema/press/index.php/index/login">log in</a> and begin the 5 step process.',
+  ),
+  'librarianInformation' => 
+  array (
+    'en_US' => 'We encourage research librarians to list this press among their library\'s electronic press holdings. As well, this open source publishing system is suitable for libraries to host for their faculty members to use with presses they are involved in editing (see <a href="http://pkp.sfu.ca/omp">Open Monograph Press</a>).',
+  ),
+  'supportedLocales' => 
+  array (
+    0 => 'en_US',
+    1 => 'pt_BR',
+  ),
+  'supportedFormLocales' => 
+  array (
+    0 => 'en_US',
+    1 => 'pt_BR',
+  ),
+  'supportedSubmissionLocales' => 
+  array (
+    0 => 'en_US',
+    1 => 'pt_BR',
   ),
   'submissionChecklist' => 
   array (
-    'pt_BR' => 
+    'en_US' => 
     array (
       0 => 
       array (
-        'content' => 'A submissão não foi publicada anteriormente, e não está em outra editora para consideração (ou uma explicação foi oferecida em Comentários ao editor).',
+        'content' => 'The submission has not been previously published, nor is it before another press for consideration (or an explanation has been provided in Comments to the Editor).',
         'order' => '1',
       ),
       1 => 
       array (
-        'content' => 'O arquivo de submissão está no formato Microsoft Word, RTF, OpenDocument, ou WordPerfect.',
+        'content' => 'The submission file is in the Microsoft Word, RTF, OpenDocument, or WordPerfect file format.',
         'order' => '2',
       ),
       2 => 
       array (
-        'content' => 'URLs para as referências form informadas, quando disponíveis.',
+        'content' => 'Where available, URLs for the references have been provided.',
         'order' => '3',
       ),
       3 => 
       array (
-        'content' => 'O texto está formatado com linha simples; usa fonte tamanho 12 pontos, adota itálico em vez de sublinhado (exceto para URLs); todas as ilustrações, figuras e tabelas estão incluídas no texto em locais específicos, em vez de estarem no final..',
+        'content' => 'The text is single-spaced; uses a 12-point font; employs italics, rather than underlining (except with URL addresses); and all illustrations, figures, and tables are placed within the text at the appropriate points, rather than at the end.',
         'order' => '4',
       ),
       4 => 
       array (
-        'content' => 'O texto segue as normas bibliográficas e de estilo definida na página <a href="http://localhost/editora/index.php/ufpb/about/submissions#authorGuidelines" target="_blank">Diretrizes para Autores</a>, disponível na página Sobre a editora.',
+        'content' => 'The text adheres to the stylistic and bibliographic requirements outlined in the <a href="http://www.editora.ufpb.br/sistema/press/index.php/editoraufpb/about/submissions#authorGuidelines" target="_blank">Author Guidelines</a>, which is found in About the Press.',
         'order' => '5',
       ),
+    ),
+  ),
+  'cataloguingMetadata' => 
+  array (
+    'en_US' => 
+    array (
+      'name' => 'Keywords',
+    ),
+  ),
+  'allowRegReviewer' => true,
+  'allowRegAuthor' => true,
+  'name' => 
+  array (
+    'en_US' => 'Editora Universitária da UFPB',
+  ),
+  'initials' => 
+  array (
+    'en_US' => 'editoraufpb',
+  ),
+  'mailingAddress' => '',
+  'pressEnabled' => true,
+  'contactName' => 'Guilherme Ataíde Dias',
+  'contactEmail' => 'guilhermeataide@gmail.com',
+  'contactPhone' => '558393050717',
+  'contactFax' => '',
+  'supportName' => '',
+  'supportEmail' => '',
+  'supportPhone' => '',
+  'pageHeaderTitle' => 
+  array (
+    'en_US' => 'Editora da Universidade Federal da Paraíba',
+  ),
+  'navItems' => NULL,
+  'searchDescription' => 
+  array (
+    'en_US' => 'Editora da Universidade Federal da Paraíba',
+  ),
+  'searchKeywords' => 
+  array (
+    'en_US' => 'e-books; livros eletrônicos; editora universitária; omp',
+  ),
+  'numDaysBeforeInviteReminder' => 0,
+  'numDaysBeforeSubmitReminder' => 0,
+  'rateReviewerOnQuality' => true,
+  'showEnsuringLink' => true,
+  'enableAnnouncements' => true,
+  'enableAnnouncementsHomepage' => true,
+  'numAnnouncementsHomepage' => 1,
+  'announcementsIntroduction' => 
+  array (
+    'en_US' => '<p>Em breve estaremos operando com o OMP em sua total funcionalidade!</p><p>Aguardem novidades...</p>',
+    'pt_BR' => '<p>Página em construção para a Editora da UFPB.</p>',
+  ),
+  'paymentPluginName' => 'ManualPayment',
+  'pressCurrency' => 'BRL',
+  'copyrightNoticeAgree' => true,
+  'pageHeaderLogoImage' => 
+  array (
+    'en_US' => 
+    array (
+      'name' => 'Logo Editora UFPB.png',
+      'uploadName' => 'pageHeaderLogoImage_en_US.png',
+      'width' => 1069,
+      'height' => 531,
+      'dateUploaded' => '2013-08-13 11:43:32',
+      'altText' => 'Editora da Universidade Federal da Paraíba',
     ),
   ),
 ); ?>
